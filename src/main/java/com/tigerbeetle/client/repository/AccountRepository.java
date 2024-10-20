@@ -280,18 +280,8 @@ public class AccountRepository {
         batch.add();
         batch.setId(id);
         batch.setPendingId(UInt128.asBytes(transfer.pendingId()));
-//        batch.setDebitAccountId(UInt128.asBytes(transfer.debitAccountId()));
-//        batch.setCreditAccountId(UInt128.asBytes(transfer.creditAccountId()));
-//        batch.setLedger(transfer.ledger());
-//        batch.setCode(transfer.code());
         batch.setAmount(transfer.amount());
         batch.setFlags(TransferFlags.POST_PENDING_TRANSFER);
-//        batch.add();
-////        batch.setId(id);
-////        batch.setDebitAccountId(UInt128.asBytes(transfer.debitAccountId()));
-////        batch.setCreditAccountId(UInt128.asBytes(transfer.creditAccountId()));
-//        batch.setId(UInt128.asBytes(transfer.id()));
-//        batch.setFlags(TransferFlags.POST_PENDING_TRANSFER);  //?  : TransferFlags.VOID_PENDING_TRANSFER 4 or 8
 
         var batchResults = client.createTransfers(batch);
 
@@ -392,7 +382,6 @@ public class AccountRepository {
         filter.setAccountId(UInt128.asBytes(customFilter.accountId()));
         filter.setCredits(customFilter.credits());
         filter.setDebits(customFilter.debits());
-//        filter.setReversed(lastFirst);
         if(customFilter.fromDate() != null) {
             filter.setTimestampMin(customFilter.fromDate().getTime() * 1000000);
         }
@@ -458,18 +447,11 @@ public class AccountRepository {
     }
 
     public static String convertTigerBeetleTimestampToDateTime(long tigerBeetleTimestampNanos) {
-        // Convert nanoseconds to milliseconds
+
         long timestampMillis = tigerBeetleTimestampNanos / 1_000_000;
-
-        // Create an Instant from the milliseconds
         Instant instant = Instant.ofEpochMilli(timestampMillis);
-
-        // Convert the Instant to a ZonedDateTime in UTC
         ZonedDateTime zonedDateTime = instant.atZone(ZoneId.of("UTC"));
-
-        // Format the ZonedDateTime with the pattern: yyyy-MM-dd HH:mm:ss.SSS z
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS z");
-
         return zonedDateTime.format(formatter);
     }
     public List<Map.Entry<UUID, CreateTransferResult>> createLinkedTransfers(List<Transfer> transfers)  {
