@@ -1,0 +1,23 @@
+server:
+  port: 8080
+spring:
+  application:
+  name: tigerbeetle-client
+  datasource:
+    url: jdbc:h2:mem:myDb;DB_CLOSE_DELAY=-1
+#    username: root
+#    password: root
+  jpa:
+    database: h2
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+management:
+  endpoints.web:
+    base-path: /
+    exposure.include: health, info
+  health.binders.enabled: true
+  endpoint.health.show-details: always
+  management.security.enabled: false
+
